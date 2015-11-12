@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol UpdateDetailedVCImageDelegate{
+    func updateImage(image: UIImage)
+}
+
 class RetrieveImage: NSObject {
     
     var image: UIImage
+    var detaledVCDelegate:UpdateDetailedVCImageDelegate?
     
     override init() {
         self.image = UIImage(named: "na.jpg")!
@@ -26,20 +31,30 @@ class RetrieveImage: NSObject {
         return self.image
     }*/
     
-    func getDataFromUrl(url:String, completion: ((data: NSData?) -> Void)) {
-        NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: url)!) { (data, response, error) in
-            completion(data: NSData(data: data!))
+    func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
+        NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
+            completion(data: data, response: response, error: error)
             }.resume()
     }
     
-    func download(url:String){
-        
-        getDataFromUrl(url) { data in
-            dispatch_async(dispatch_get_main_queue()) {
-                var image = UIImage(data: data!)
+    func downloadImage(url: NSURL){
+        print("Started downloading \"\(url.URLByDeletingPathExtension!.lastPathComponent!)\".")
+        getDataFromUrl(url) { (data, response, error)  in
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let data = data where error == nil else { return }
+                print("Finished downloading \"\(url.URLByDeletingPathExtension!.lastPathComponent!)\".")
+                self.image = UIImage(data: data)!
+                self.detaledVCDelegate?.updateImage(UIImage(data: data)!)
             }
         }
-        
-}
+    }
+    
+    func retrieveImage(urlString: String, detailedVC: DetailedController)
+    {
+        self.detaledVCDelegate = detailedVC
+        print("URL: \(urlString)")
+        let url:NSURL = NSURL(string: urlString)!
+        downloadImage(url)
+    }
 
 }

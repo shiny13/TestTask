@@ -13,12 +13,14 @@
 		3D1704DB1BEC30C40030EC38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1704DA1BEC30C40030EC38 /* Assets.xcassets */; };
 		3D1704DE1BEC30C40030EC38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D1704DC1BEC30C40030EC38 /* LaunchScreen.storyboard */; };
 		3D1704F41BEC30C50030EC38 /* TestTaskUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1704F31BEC30C50030EC38 /* TestTaskUITests.swift */; };
+		3D31AD461BF477BE001C630A /* DetailedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D31AD451BF477BE001C630A /* DetailedController.swift */; };
+		3D31AD481BF47913001C630A /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D31AD471BF47913001C630A /* TestData.swift */; };
+		3D31AD4A1BF4A351001C630A /* GetiTunesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D31AD491BF4A351001C630A /* GetiTunesData.swift */; };
 		3D541AA51BF1F2CD00CBF686 /* ScrollViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541AA41BF1F2CD00CBF686 /* ScrollViewContainer.swift */; };
 		3D541AA71BF2031400CBF686 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541AA61BF2031400CBF686 /* Album.swift */; };
 		3D541AB01BF2378600CBF686 /* RetrieveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541AAF1BF2378600CBF686 /* RetrieveImage.swift */; };
 		3D541AB81BF28D2E00CBF686 /* APIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541AB71BF28D2E00CBF686 /* APIConnector.swift */; };
 		3D541ABA1BF29E2B00CBF686 /* na.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D541AB91BF29E2B00CBF686 /* na.jpg */; };
-		3D541ABC1BF2AACB00CBF686 /* UIImageViewAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541ABB1BF2AACB00CBF686 /* UIImageViewAsync.swift */; };
 		3D541ABE1BF2B51300CBF686 /* TestRetrieveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D541ABD1BF2B51300CBF686 /* TestRetrieveImage.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,12 +54,14 @@
 		3D1704EF1BEC30C50030EC38 /* TestTaskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestTaskUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D1704F31BEC30C50030EC38 /* TestTaskUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskUITests.swift; sourceTree = "<group>"; };
 		3D1704F51BEC30C50030EC38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D31AD451BF477BE001C630A /* DetailedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedController.swift; sourceTree = "<group>"; };
+		3D31AD471BF47913001C630A /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		3D31AD491BF4A351001C630A /* GetiTunesData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetiTunesData.swift; sourceTree = "<group>"; };
 		3D541AA41BF1F2CD00CBF686 /* ScrollViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewContainer.swift; sourceTree = "<group>"; };
 		3D541AA61BF2031400CBF686 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		3D541AAF1BF2378600CBF686 /* RetrieveImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetrieveImage.swift; sourceTree = "<group>"; };
 		3D541AB71BF28D2E00CBF686 /* APIConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConnector.swift; sourceTree = "<group>"; };
 		3D541AB91BF29E2B00CBF686 /* na.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = na.jpg; sourceTree = "<group>"; };
-		3D541ABB1BF2AACB00CBF686 /* UIImageViewAsync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewAsync.swift; sourceTree = "<group>"; };
 		3D541ABD1BF2B51300CBF686 /* TestRetrieveImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRetrieveImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,6 +159,7 @@
 			children = (
 				3D1704D51BEC30C40030EC38 /* ViewController.swift */,
 				3D541AA41BF1F2CD00CBF686 /* ScrollViewContainer.swift */,
+				3D31AD451BF477BE001C630A /* DetailedController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -171,7 +176,8 @@
 		3D541AB11BF238DC00CBF686 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				3D541ABB1BF2AACB00CBF686 /* UIImageViewAsync.swift */,
+				3D31AD471BF47913001C630A /* TestData.swift */,
+				3D31AD491BF4A351001C630A /* GetiTunesData.swift */,
 			);
 			name = Presenter;
 			sourceTree = "<group>";
@@ -315,10 +321,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D31AD481BF47913001C630A /* TestData.swift in Sources */,
 				3D1704D61BEC30C40030EC38 /* ViewController.swift in Sources */,
+				3D31AD4A1BF4A351001C630A /* GetiTunesData.swift in Sources */,
 				3D541AB01BF2378600CBF686 /* RetrieveImage.swift in Sources */,
 				3D541AB81BF28D2E00CBF686 /* APIConnector.swift in Sources */,
-				3D541ABC1BF2AACB00CBF686 /* UIImageViewAsync.swift in Sources */,
+				3D31AD461BF477BE001C630A /* DetailedController.swift in Sources */,
 				3D1704D41BEC30C40030EC38 /* AppDelegate.swift in Sources */,
 				3D541AA51BF1F2CD00CBF686 /* ScrollViewContainer.swift in Sources */,
 				3D541AA71BF2031400CBF686 /* Album.swift in Sources */,

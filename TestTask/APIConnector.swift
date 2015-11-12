@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol UpdateiTunesDataDelegate{
+    func updateData(albums: [Album])
+}
+
 class APIConnector: NSObject {
     
     var albums = [Album]()
+    var delegate:UpdateiTunesDataDelegate?
     
     override init() {
         

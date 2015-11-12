@@ -8,26 +8,40 @@
 
 import UIKit
 
-protocol UpdateAlbumsDelegate {
-    func didUpdateAlbum (albums: [Album])
-}
-
-protocol UpdateImageDelegate {
-    func didUpdateImage (pageImage: UIImage)
+protocol UpdateDetailsDelegate {
+    func updateAllElements (album: Album?)
 }
 
 
-class ViewController: UIViewController, UIScrollViewDelegate {
+class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDelegate {
 
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
     var pageImages: [UIImage] = []
     var pageViews: [UIImageView?] = []
     var albums: [Album] = []
+    var currentAlbum: Album?
+    
+    @IBOutlet weak var genreLabel: UILabel!
+    @IBOutlet weak var albumLabel: UILabel!
+    @IBOutlet weak var artistLabel: UILabel!
+    
+    var delegate:UpdateDetailsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initData()
+        //initView()
+    }
+    
+    func initData()
+    {
+        //Populate with test data
+        /*let test = TestData()
+        self.albums = test.generateSampleData()*/
+        
+        //Populate from iTunes API
         let api = APIConnector()
         //To search by artist ID in itunes
         albums = api.searchiTunes()
@@ -35,18 +49,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         //searchiTunes()
         print("album count \(albums.count)")
         
-        initView()
+        //Test with 1st index of albums
+        //self.currentAlbum = self.albums[0]
     }
     
     func initView()
     {
-        /*for item in albums {
-        let getImage = RetrieveImage()
-            pageImages.append(getImage.downloadImage(item.albumImageURL))
-        
-        }*/
-
-        
         // Set up the image you want to scroll & zoom and add it to the scroll view
         /*pageImages = [UIImage(named: "photo1.png")!,
         UIImage(named: "photo2.png")!,
@@ -78,6 +86,22 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    func updateData(albums: [Album])
+    {
+        self.albums = albums
+        initView()
+        
+        //Test with 1st index of albums
+        self.currentAlbum = self.albums[0]
+    }
+    
+    func populateLabels()
+    {
+        self.artistLabel.text = self.currentAlbum!.artist
+        self.albumLabel.text = self.currentAlbum!.albumName
+        self.genreLabel.text = self.currentAlbum!.genre
+    }
+    
     func loadVisiblePages() {
         // First, determine which page is currently visible
         let pageWidth = scrollView.frame.size.width
@@ -85,6 +109,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         // Update the page control
         pageControl.currentPage = page
+        
+        //Update current album
+        self.currentAlbum? = albums[page]
         
         // Work out which pages you want to load
         let firstPage = page - 1
@@ -104,6 +131,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         for var index = lastPage+1; index < pageImages.count; ++index {
             purgePage(index)
         }
+        
+        //Load Labels with text
+        populateLabels()
     }
     
     func loadPage(page: Int) {
@@ -147,22 +177,20 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         loadVisiblePages()
     }
     
-    func didUpdateAlbum (albums: [Album])
-    {
-        self.albums = albums
+    @IBAction func nextClicked(sender: AnyObject) {
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        for item in albums {
-            let getImage = RetrieveImage()
-            //pageImages.append(getImage.downloadImage(item.albumImageURL))
-            getImage.downloadImage(item.albumImageURL)
+        if segue.identifier == "showDetailsVC"
+        {
+            let detailsVC:DetailedController = segue.destinationViewController as! DetailedController
+            self.delegate = detailsVC
+            print("Check value - \(self.currentAlbum!.artist) ")
+            self.delegate?.updateAllElements(self.currentAlbum!)
+            
         }
         
-        
-    }
-
-    func didUpdateImage (pageImage: UIImage)
-    {
-        self.pageImages.append(pageImage)
     }
     
     //Testing this method -- will be deleted later

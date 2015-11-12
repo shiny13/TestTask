@@ -16,6 +16,11 @@ class Album {
     var albumImageURL: String = ""
     var price: String = ""
     
+    init ()
+    {
+        
+    }
+    
     init(artist: String, albumName: String, genre: String, albumImageURL: String) {
         
         self.artist = artist
