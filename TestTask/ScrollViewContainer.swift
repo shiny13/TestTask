@@ -9,7 +9,8 @@
 import UIKit
 
 class ScrollViewContainer: UIView {
-
+    
+    //MARK: Properties
     @IBOutlet var scrollView1: UIScrollView?
     
     override func hitTest(point: CGPoint, withEvent event: UIEvent!) -> UIView? {

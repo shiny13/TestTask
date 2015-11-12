@@ -10,11 +10,12 @@ import UIKit
 
 class TestData: NSObject {
     
+    //MARK: Constructor
     override init() {
         
     }
     
-    
+    //MARK: Sample Data
     func generateSampleData() -> [Album]
     {
         var albums:[Album] = [Album]()

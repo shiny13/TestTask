@@ -1,14 +1,14 @@
 //
-//  TestTaskUITests.swift
-//  TestTaskUITests
+//  TestViewController.swift
+//  TestTask
 //
-//  Created by Shahnawaz Alam on 6/11/2015.
+//  Created by Shahnawaz Alam on 13/11/2015.
 //  Copyright © 2015 Shahnawaz Alam. All rights reserved.
 //
 
 import XCTest
 
-class TestTaskUITests: XCTestCase {
+class TestViewController: XCTestCase {
         
     override func setUp() {
         super.setUp()
@@ -28,9 +28,36 @@ class TestTaskUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testUIViewController () {
+        let vc = ViewController()
+        
+        vc.viewDidLoad()
+        vc.initData()
+        vc.initView()
     }
+    
+    func testUITestDataViewController () {
+        let vc = ViewController()
+        
+        vc.viewDidLoad()
+        
+        let testData = TestData()
+        let albums = testData.generateSampleData()
+        
+        vc.sortAndAssignAlbums(albums)
+        vc.initView()
+    }
+    
+    func testUINilDataViewController () {
+        let vc = ViewController()
+        
+        vc.viewDidLoad()
+        
+        let nilData = [Album]()
+        
+        vc.sortAndAssignAlbums(nilData)
+        vc.initView()
+    }
+
     
 }

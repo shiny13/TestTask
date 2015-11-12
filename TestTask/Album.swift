@@ -8,17 +8,21 @@
 
 import UIKit
 
-class Album {
-
-    var artist: String = ""
-    var albumName: String = ""
-    var genre: String = ""
-    var albumImageURL: String = ""
-    var price: String = ""
+class Album  {
     
+    //MARK: Properties
+    var artist: String
+    var albumName: String
+    var genre: String
+    var albumImageURL: String
+    
+    //MARK: Constructor
     init ()
     {
-        
+        self.artist = ""
+        self.albumName = ""
+        self.genre = ""
+        self.albumImageURL = ""
     }
     
     init(artist: String, albumName: String, genre: String, albumImageURL: String) {
@@ -27,17 +31,6 @@ class Album {
         self.albumName = albumName
         self.genre = genre
         self.albumImageURL = albumImageURL
-    }
-
-    
-    init(artist: String, albumName: String, genre: String, albumImageURL: String, price: String) {
-        
-        self.artist = artist
-        self.albumName = albumName
-        self.genre = genre
-        self.albumImageURL = albumImageURL
-        self.price = price
-        
     }
     
 }

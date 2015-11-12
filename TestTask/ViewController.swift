@@ -8,13 +8,15 @@
 
 import UIKit
 
+//MARK: Delegates
 protocol UpdateDetailsDelegate {
     func updateAllElements (album: Album?)
 }
 
 
-class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDelegate {
-
+class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDelegate, DownloadAlbumImagesDelegate {
+    
+    //MARK: Properties
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
     var pageImages: [UIImage] = []
@@ -28,13 +30,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
     
     var delegate:UpdateDetailsDelegate?
     
+    //MARK: Constructor
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.currentAlbum = Album()
         
         initData()
         //initView()
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK: Initialization methods
     func initData()
     {
         //Populate with test data
@@ -44,18 +54,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
         //Populate from iTunes API
         let api = APIConnector()
         //To search by artist ID in itunes
-        albums = api.searchiTunes()
+        //albums =
+        api.searchiTunes(self)
         
         //searchiTunes()
         print("album count \(albums.count)")
-        
-        //Test with 1st index of albums
-        //self.currentAlbum = self.albums[0]
     }
     
     func initView()
     {
-        // Set up the image you want to scroll & zoom and add it to the scroll view
+        // Testing with sample images
         /*pageImages = [UIImage(named: "photo1.png")!,
         UIImage(named: "photo2.png")!,
         UIImage(named: "photo3.png")!,
@@ -81,27 +89,52 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
         loadVisiblePages()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+    //MARK: Delegate - update from iTunes
     func updateData(albums: [Album])
     {
-        self.albums = albums
-        initView()
+        sortAndAssignAlbums(albums)
         
-        //Test with 1st index of albums
-        self.currentAlbum = self.albums[0]
+        //Initialize URL array to download album images
+        var urls:[NSURL] = [NSURL]()
+        for album in self.albums
+        {
+            self.albums.append(album)
+            urls.append(NSURL(string: album.albumImageURL)!)
+        }
+        
+        //Download Images for Album
+        let retrieveImage = RetrieveImage()
+        retrieveImage.retrieveAlbumImages(urls, dlImageDelegate: self)
+        
     }
     
+    //MARK: Delegate - download images
+    func updateImageArray(image: UIImage, total: Int)
+    {
+        self.pageImages.append(image)
+        
+        if pageImages.count == total
+        {
+            dispatch_async(dispatch_get_main_queue(), {
+                // code here
+                self.initView()
+                
+            })
+        }
+    }
+    
+    //MARK: Populate labels
     func populateLabels()
     {
-        self.artistLabel.text = self.currentAlbum!.artist
-        self.albumLabel.text = self.currentAlbum!.albumName
-        self.genreLabel.text = self.currentAlbum!.genre
+        if self.currentAlbum != nil
+        {
+            self.artistLabel.text = self.currentAlbum!.artist
+            self.albumLabel.text = self.currentAlbum!.albumName
+            self.genreLabel.text = self.currentAlbum!.genre
+        }
     }
     
+    //MARK: Lazy loading for scroll view
     func loadVisiblePages() {
         // First, determine which page is currently visible
         let pageWidth = scrollView.frame.size.width
@@ -172,6 +205,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
         }
     }
     
+    //MARK: ScrollView delegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
         // Load the pages that are now on screen
         loadVisiblePages()
@@ -180,6 +214,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
     @IBAction func nextClicked(sender: AnyObject) {
     }
     
+    //MARK: Change to next view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showDetailsVC"
@@ -193,67 +228,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, UpdateiTunesDataDe
         
     }
     
-    //Testing this method -- will be deleted later
-    func searchiTunes()
+    //MARK: sort Album array
+    func sortAndAssignAlbums(albums: [Album])
     {
-        let postEndpoint: String = "https://itunes.apple.com/lookup?id=909253&entity=album"
-        guard let url = NSURL(string: postEndpoint) else {
-            print("Error: cannot create URL")
+        if albums.count == 0 {
             return
         }
-        let urlRequest = NSURLRequest(URL: url)
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
+        let sortedAlbums:[Album] = albums.sort({$0.albumName < $1.albumName})
         
-        let task = session.dataTaskWithRequest(urlRequest, completionHandler: {
-            (data, response, error) in
-            guard let responseData = data else {
-                print("Error: did not receive data")
-                return
-            }
-            guard error == nil else {
-                print("error calling GET on iTunes artist ID")
-                print(error)
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            let post: NSDictionary
-            do {
-                post = try NSJSONSerialization.JSONObjectWithData(responseData,
-                    options: []) as! NSDictionary
-            } catch  {
-                print("error trying to convert data to JSON")
-                return
-            }
-            
-            // testing posts for data
-            //print("Test data: \(post)")
-            
-            if let items = post["results"] as? NSArray {
-                
-                for (var i = 1; i < items.count; i++)
-                {
-                    var item = items[i]
-                    print("\(item)")
-                    let artist = item["artistName"] as! String
-                    let albumName = item["collectionName"] as! String
-                    let genre = item["primaryGenreName"] as! String
-                    let imageURL = item["artworkUrl100"] as! String
-                    //let collectionPrice = item["collectionPrice"] as! String
-                    //print("Checking: \(artist) \(albumName) \(genre)")
-                    
-                    var album: Album = Album(artist: artist, albumName: albumName, genre: genre, albumImageURL: imageURL)
-                    self.albums.append(album)
-                }
-                
-            }
-        })
-        task.resume()
-        
-        print("album count \(self.albums.count)")
+        for album in sortedAlbums
+        {
+            self.albums.append(album)
+        }
     }
-
 
 }
 

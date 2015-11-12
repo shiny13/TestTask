@@ -14,19 +14,25 @@ protocol UpdateiTunesDataDelegate{
 
 class APIConnector: NSObject {
     
+    //MARK: Properties
     var albums = [Album]()
     var delegate:UpdateiTunesDataDelegate?
     
+    //MARK: Constructor
     override init() {
         
     }
     
-    func searchiTunes() -> [Album]
+    //MARK: Call API
+    func searchiTunes(delegate: UpdateiTunesDataDelegate)
     {
+        self.delegate = delegate
+        
         let postEndpoint: String = "https://itunes.apple.com/lookup?id=909253&entity=album"
         guard let url = NSURL(string: postEndpoint) else {
             print("Error: cannot create URL")
-            return albums
+            //return albums
+            return
         }
         let urlRequest = NSURLRequest(URL: url)
         
@@ -62,23 +68,22 @@ class APIConnector: NSObject {
                 for (var i = 1; i < items.count; i++)
                 {
                     var item = items[i]
-                    print("\(item)")
                     let artist = item["artistName"] as! String
                     let albumName = item["collectionName"] as! String
                     let genre = item["primaryGenreName"] as! String
                     let imageURL = item["artworkUrl100"] as! String
                     //let collectionPrice = item["collectionPrice"] as! String
-                    print("Checking: \(artist) \(albumName) \(genre)")
+                    //print("Checking: \(artist) \(albumName) \(genre)")
                     
                     var album: Album = Album(artist: artist, albumName: albumName, genre: genre, albumImageURL: imageURL)
                     self.albums.append(album)
                 }
+                print("album count \(self.albums.count)")
+                self.delegate?.updateData(self.albums)
             }
         })
         task.resume()
         
-        print("album count \(self.albums.count)")
-        return self.albums
     }
 
 }

@@ -9,15 +9,16 @@
 import UIKit
 
 class DetailedController: UIViewController, UpdateDetailsDelegate , UpdateDetailedVCImageDelegate{
-
+    
+    //MARK: Properties
     @IBOutlet weak var artistLbl: UILabel!
     @IBOutlet weak var albumLbl: UILabel!
     @IBOutlet weak var genreLbl: UILabel!
     @IBOutlet weak var albumImage: UIImageView!
 
-    
     var album: Album
     
+    //MARK: Constructor
     required init?(coder aDecoder: NSCoder) {
         self.album = Album()
         super.init(coder: aDecoder)
@@ -41,6 +42,7 @@ class DetailedController: UIViewController, UpdateDetailsDelegate , UpdateDetail
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: Initialize UI
     func initializeElements()
     {
         self.artistLbl.text = self.album.artist
@@ -51,6 +53,7 @@ class DetailedController: UIViewController, UpdateDetailsDelegate , UpdateDetail
         retrieveImage.retrieveImage(self.album.albumImageURL, detailedVC: self)
     }
 
+    //MARK: Delegate - loading view
     func updateAllElements (album: Album?)
     {
         self.album = album!
@@ -59,6 +62,7 @@ class DetailedController: UIViewController, UpdateDetailsDelegate , UpdateDetail
         print("Check: \(album!.artist)")
     }
     
+    //MARK: Delegate - downloading image
     func updateImage(image: UIImage)
     {
         self.albumImage.image = image
